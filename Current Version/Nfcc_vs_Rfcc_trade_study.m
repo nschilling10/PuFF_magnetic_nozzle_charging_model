@@ -1,6 +1,6 @@
 %% Nfcc vs. Rfcc trade study study
 % study trades number of turns in the magnetic nozzle and the size of the
-% magnetic nozzle to maxiize the exit velocity, and thereby the thrust and
+% magnetic nozzle to maximize the exit velocity, and thereby the thrust and
 % specific impulse.
 % Nathan Schilling
 % 05/05/2020
@@ -43,6 +43,9 @@ circInps.I20 = 0;
 circInps.V10 = 0;
 circInps.V20 = 0;  %voltage on reactor caps
 
+%------Energy the capacitros must be charged to in order for the Z-machine to work
+targetEnergy=10*1e6;
+
 graphDisplay=false;
 
 Vpf_mat=zeros(length(Nfcc_vec),length(Rfcc_vec));
@@ -54,10 +57,14 @@ for i=1:length(Nfcc_vec)
         circInps.Nfcc = Nfcc_vec(i);
         circInps.Rfcc = Rfcc_vec(j);
         
-        [Vp_f,capIsCharged]=rlc_recharge_nozzle_circuit_v3_8_1(circInps,plasmaInps,graphDisplay);
+        [I1, I2, Vfcc, Vcap, R_plasma, V_plasma]=charging_nozzle_model(circInps,plasmaInps,graphDisplay); %run the model
+        % Note the above outputs are vectors
         
-        if capIsCharged
-            Vpf_mat(i,j)=Vp_f;
+        % Calculate eneryg in the capacitor
+        E_cap=0.5*circInps.C*Vcap.^2;
+        
+        if E_cap > targetEnergy
+            Vpf_mat(i,j)=Vcap(end);
         else
             Vpf_mat(i,j)=NaN;
         end
