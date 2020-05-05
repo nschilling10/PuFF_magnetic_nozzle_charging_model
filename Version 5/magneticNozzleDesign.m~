@@ -1,0 +1,18 @@
+function mass=magneticNozzleDesign(circuitInps,I1_vec,rho,XC)
+% Takes the circuit input variables and the vector of I1 currents 
+% and outputs the mass of the magnetic nozzle for a nozzle made of 
+% material rho and having cross-section XC
+Nfcc=circuitInps.Nfcc;
+Rfcc=circuitInps.Nfcc;
+l=Rfcc;
+H=(l/Nfcc);
+C=2*pi*Rfcc;
+S=sqrt(H^2+C^2);
+L=Nfcc*S;
+Vol=XC*L;
+R1=rho*L/XC;
+Heat_pwr=R1*I1_vec.^2;
+Rad_pwr=sigma*eps*(L*sqrt(XC/pi))*(T_ref^4); %assumes metal with specified epsilson, at reference temperature (this temeprature must be the same temeprature the r
+mass=Rho*Vol; %Rho here is density
+
+end

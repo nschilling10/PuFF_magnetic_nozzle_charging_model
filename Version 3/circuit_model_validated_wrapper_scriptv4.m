@@ -1,0 +1,59 @@
+%% Nathan Schilling
+% Generator starting inductance & Seed current trade study wrapper script
+% 06/28/19
+clear all
+close all
+
+test.L1=1.1e-4;
+test.L2=2.2e-6;
+test.graphDisplay=false;
+test.R1=1;
+test.R2=1;
+
+L0_vec=logspace(-6,0,1e3);
+I0_vec=logspace(4,8,1e2);
+Gain_mat=ones(length(L0_vec),length(I0_vec));
+Req_circ_e=ones(length(L0_vec),length(I0_vec));
+target=10e6;
+tol=10e4;
+flag=true;
+for i=1:length(I0_vec)
+    test.I0=I0_vec(i);
+    for j=1:length(L0_vec)
+        test.L0=L0_vec(j);
+        [E_gain,E_circ] = circuitModelFunValidatedv2_0(test);
+        Req_circ_e(j,i)=E_circ;
+        if abs(E_circ-target) <= tol || flag
+            Gain_mat(j,i)=E_gain/E_circ;
+        else
+            Gain_mat(j,i)=0;
+        end
+    end
+end
+%% Plot results
+figure(11)
+surf(I0_vec*1e-6,L0_vec*1e6,Gain_mat)
+set(gca,'xscale','log')
+set(gca,'yscale','log')
+set(gca,'zscale','log')
+xlabel('$I_0$ generator side (MA)','interpreter','latex','fontsize',24)
+ylabel('$L_0$ generator side ($\mu$H)','interpreter','latex','fontsize',24)
+zlabel('\textbf{Gain (}{\boldmath$\frac{\Delta E_{cap}}{\Delta E_{gen}}$}\textbf{)}','interpreter','latex','fontsize',24)
+
+figure(12)
+surf(I0_vec*1e-6,L0_vec*1e6,Req_circ_e)
+set(gca,'xscale','log')
+set(gca,'yscale','log')
+set(gca,'zscale','log')
+xlabel('$I_0$ generator side (MA)','interpreter','latex','fontsize',24)
+ylabel('$L_0$ generator side ($\mu$H)','interpreter','latex','fontsize',24)
+zlabel('\textbf{\boldmath$\Delta E_{gen}$}','interpreter','latex','fontsize',24)
+%% Find max
+[rows,colInd_vec]=max(Gain_mat);
+[val,rowInd]=max(rows);
+colInd=colInd_vec(rowInd);
+test.I0=I0_vec(rowInd);
+test.L0=L0_vec(colInd);
+test.graphDisplay=true;
+[E_gain,E_circ] = circuitModelFunValidatedv2_0(test)
+val == E_gain/E_circ

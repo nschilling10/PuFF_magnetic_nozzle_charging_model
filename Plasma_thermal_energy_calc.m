@@ -1,0 +1,58 @@
+% Universal Constants
+R_u=8.314; %[R_u]=J/mol*K
+k_b=11604.505; %[k_b]=K/eV
+
+% Plasma Parameters
+T_ev=100; %[T_ev]=eV
+
+% Species masses
+m_LiD=0.927; %[m_LiD]=g
+m_Pu=39.5; %[m_Pu]=g
+m_Fe=3.3; %[m_Fe]=g
+m_T=sum([m_LiD m_Pu m_Fe]);
+
+% Species molecular weights
+MW_LiD=8.954; %[MW_LiD]=g/mol. 
+% Retrieved from https://pubchem.ncbi.nlm.nih.gov/compound/Lithium_deuteride#section=Top
+MW_Pu=239.052; %[MW_Pu]=g/mol.
+% Retrieved from https://pubchem.ncbi.nlm.nih.gov/compound/Plutonium-239
+MW_Fe=55.845; %[MW_Fe]=g/mol
+% Retrieved from https://pubchem.ncbi.nlm.nih.gov/compound/23925#section=Top
+MW_He=4.002602; %[MW_He]=g/mol. 
+
+% Mol of species derivation 
+mol_LiD=m_LiD/MW_LiD;
+mol_Pu=m_Pu/MW_Pu;
+mol_Fe=m_Fe/MW_Fe;
+
+% Convert 1mol LiD to 2mol He
+%mol_He=2*mol_LiD;
+tot_mol=sum([mol_LiD, mol_Pu, mol_Fe]);
+
+% Species mol fraction
+x_LiD=mol_LiD/tot_mol;
+%x_He=mol_He/tot_mol;
+x_Pu=mol_Pu/tot_mol;
+x_Fe=mol_Fe/tot_mol;
+
+% Molecular weight of species mixture
+MW_mix=sum([x_LiD x_Pu x_Fe].*[MW_LiD MW_Pu MW_Fe]);
+
+R=R_u/MW_mix;
+E_therm=(3*m_T*R*(k_b*T_ev))
+% R=E_therm/(m_T*(k_b*T_ev))
+% MW_mix=R_u/R
+
+A=6.02214076e23; %https://physics.nist.gov/cgi-bin/cuu/Value?na
+atom_LiD=mol_LiD*A;
+
+% Energy per fusion reaction
+MW_neut=1.00866491595; %https://physics.nist.gov/cgi-bin/cuu/Value?mnu|search_for=neutron+mass
+massDef=(MW_neut+MW_LiD)-2*MW_He;
+E_per_fuse=massDef*1.66053906660e-27*(299792458)^2;
+E_fuse=atom_LiD*E_per_fuse
+E_fiss=(((210*A)/MW_Pu)*1.60217e-19)*m_Pu*1e6
+% Calculated from
+% https://www.nndc.bnl.gov/sigma/getInterpreted.jsp?evalid=15337&mf=1&mt=458
+% and https://whatisnuclear.com/energy-density.html
+E_tot=E_fuse+E_fiss
