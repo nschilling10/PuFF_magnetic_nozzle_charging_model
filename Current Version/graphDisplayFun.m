@@ -1,6 +1,15 @@
-function graphDisplayFunction(t,I1, I2, Vfcc, Vcap, R_plasma, V_plasma,circInps,plasmaInps,energies,Bfield)
-
+function graphDisplayFun(modelOutput,circInps,plasmaInps,energies,Bfield)
 %% Function version of the lines that display graphs related to the charging circuit model
+% Load in model data from structure
+t=modelOutput.t;
+I1=modelOutput.I1;
+I2=modelOutput.I2;
+Vfcc=modelOutput.Vfcc;
+Vcap=modelOutput.Vcap;
+R_plasma=modelOutput.R_plasma;
+V_plasma=modelOutput.V_plasma;
+
+
 %plot the results
 figure(1),
 plot(t*1e6,I1/1e6), hold on

@@ -1,4 +1,4 @@
-function [I1, I2, Vfcc, Vcap, R_plasma, V_plasma]=charging_nozzle_model(circInps,plasmaInps,graphDisplay)
+function modelOutputs=charging_nozzle_model(circInps,plasmaInps,graphDisplay)
 
 % Nathan Schilling
 % 05/05/2020
@@ -162,12 +162,15 @@ V_plasma = y(:,6);
 Vfcc = Vfccfun(I1,V_plasma);
 Vcap = y(:,4);
 
+modelOutputs=struct('t',t,'I1',I1,'I2',I2,'Vfcc',Vfcc,'Vcap',Vcap,...
+    'R_plasma',R_plasma,'V_plasma',V_plasma);
+
 if graphDisplay
     
-    energies=calcCompEnergiesFun(t,I1, I2, Vfcc, Vcap, R_plasma, V_plasma, circInps, plasmaInps);
+    energies=calcCompEnergiesFun(modelOutputs, circInps, plasmaInps);
     Bfield=calcBfield(circInps,R_plasma);
     [eta_KE,eta_circ,eta_sys]=efficiencyCalcFun(energies,plasmaInps)
-    graphDisplayFun(t,I1, I2, Vfcc, Vcap, R_plasma, V_plasma,circInps,plasmaInps,energies,Bfield);
+    graphDisplayFun(modelOutputs,circInps,plasmaInps,energies,Bfield);
 end
 
 

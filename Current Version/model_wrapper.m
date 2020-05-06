@@ -162,4 +162,4 @@ else % your stuff goes here
 end
 %%
 graphDisplay=true;
-[I1, I2, Vfcc, Vcap, R_plasma, V_plasma]=charging_nozzle_model(circInps,plasmaInps,graphDisplay);
+chargingModelOutputs=charging_nozzle_model(circInps,plasmaInps,graphDisplay);
