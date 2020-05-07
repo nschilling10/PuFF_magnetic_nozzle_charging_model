@@ -4,11 +4,11 @@ function modelOutputs=charging_nozzle_model(circInps,plasmaInps,graphDisplay)
 % 05/05/2020
 % Takes parameters regarding the plasma and circuit inputs and outputs 
 
-%% units
+%units
 eV = 11605;
 keV = 1000*eV;
 
-%% constants
+%constants
 mu0 = 4*pi*1e-7;
 Ru=8314.5;
 e=1.602176634e-19; %[e]=J/eV
@@ -17,8 +17,8 @@ k_b=e*8.617333262145e-5; %[k_b]=eV/K
 %make sure winding is backward.
 % MT = -abs(MT);
 
-%% Assign inputs
-%% primary circuit (1) inputs
+% Assign inputs
+%primary circuit (1) inputs
 L1 = circInps.L1;
 R1 = circInps.R1;
 
@@ -47,7 +47,7 @@ LT2 = mu0 * mu_r * AT*NT2^2/lT2;
 k=circInps.k;
 MT = k*sqrt(LT1*LT2);
 
-%% plasma inputs
+%plasma inputs
 m_propellant = plasmaInps.m_propellant;
 MW = plasmaInps.MW;
 Rgas = Ru/MW;
@@ -55,7 +55,7 @@ Rgas = Ru/MW;
 T0 = plasmaInps.T0*keV;
 gamma = plasmaInps.g;
 
-%% -----------initial conditions
+%-----------initial conditions
 I10 = circInps.I10;
 I20 = circInps.I20;
 %     V10 = circInps.V10;

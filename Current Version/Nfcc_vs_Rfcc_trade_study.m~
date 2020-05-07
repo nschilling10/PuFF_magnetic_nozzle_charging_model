@@ -62,7 +62,7 @@ for i=1:length(Nfcc_vec)
         energies=calcCompEnergiesFun(modelOutput,circInps,plasmaInps);
         
 %         if E_cap > targetEnergy
-            Vpf_mat(i,j)=-modelOutput.V_plasma(end);
+            Vpf_mat(i,j)=modelOutput.Vcap(end);
 %         else
 %             Vpf_mat(i,j)=NaN;
 %         end
@@ -84,41 +84,15 @@ figure(10)
 if filtered
     plot3(Nfcc_vec,Rfcc_vec,Vpf_vec*1e-3,'.','MarkerSize',20)
 else
-    surf(Rfcc_vec,Nfcc_vec,Vpf_mat*1e-3)
+    surf(Nfcc_vec,Rfcc_vec,Vpf_mat*1e-3)
 end
 set(gca,'xscale','log')
 set(gca,'yscale','log')
-xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
-ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+xlabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+ylabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
 zlabel('\boldmath$V_{plasma_{f}}$ (km/s)','interpreter','latex','fontsize',24)
-[cols,rowInd_vec]=max(Vpf_mat,[],1);
-[val,colInd]=max(cols);
-rowInd=rowInd_vec(colInd);
-disp('Nfcc best =')
-Nfcc_vec(rowInd)
-disp('Rfcc (m) best =')
-Rfcc_vec(colInd)
-val == Vpf_mat(rowInd,colInd)
-if exist('Ecapf_mat','var') && false
-    figure(11)
-    surf(Rfcc_vec,Nfcc_vec,Ecapf_mat)
-    set(gca,'xscale','log')
-    set(gca,'yscale','log')
-    set(gca,'zscale','log')
-    xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
-    ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
-    zlabel('\boldmath$E_{cap_{f}}$ (MJ)','interpreter','latex','fontsize',24)
-    [cols,rowInd_vec]=max(Ecapf_mat,[],1);
-    [val,colInd]=max(cols);
-    rowInd=rowInd_vec(colInd);
-    disp('Nfcc best =')
-    Nfcc_vec(rowInd)
-    disp('Rfcc (m) best =')
-    Rfcc_vec(colInd)
-    val == Ecapf_mat(rowInd,colInd)
-end
-circInps.Nfcc = Nfcc_vec(rowInd);
-circInps.Rfcc = Rfcc_vec(colInd);
-graphDisplay=true;
-modelOutput=charging_nozzle_model(circInps,plasmaInps,graphDisplay); %run the model
-energies=calcCompEnergiesFun(modelOutput,circInps,plasmaInps);
+[cols,colInd_vec]=max(Vpf_mat,);
+[val,rowInd]=max(rows);
+colInd=colInd_vec(rowInd);
+Nfcc_vec(colInd);
+Rfcc_vec(rowInd);
