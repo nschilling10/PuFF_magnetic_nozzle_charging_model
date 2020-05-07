@@ -124,20 +124,20 @@ elseif reactorGradeCaps  %reactor grade caps
     circInps.V20 = 0;  %voltage on reactor caps
 else % your stuff goes here
     
-    plasmaInps.m_propellant = .125;
+    plasmaInps.m_propellant = .155;
     %primary circuit (1) inputs
     circInps.L1 = 100e-9;
-    circInps.R1 = 0*1e-5 ;
+    circInps.R1 = 1e-5 * 0;
     
     %secondary circuit (2) inputs including reactor capacitance C
     circInps.L2 = 10e-9;
-    circInps.R2 = 5e-3 * 1;
+    circInps.R2 = 5e-3 * 0;
     circInps.C = .01;  %because we need 50 MJ or more
     
     %plasma inputs
-    plasmaInps.MW = 4;
-    Rgas = 8314.5/MW;
-    plasmaInps.T0 = 1*.98;
+    plasmaInps.MW = 235;
+    Rgas = 8314.5/plasmaInps.MW;
+    plasmaInps.T0 = 1;
     plasmaInps.g = 1.3;
     
     %transformer inputs
@@ -145,14 +145,14 @@ else % your stuff goes here
     circInps.k=0.9;
     
     circInps.rT = .1;
-    circInps.NT1 = 30;
-    circInps.NT2 = 1.7; %NT1/10;
+    circInps.NT1 = 100;
+    circInps.NT2 = 1; %NT1/10;
     circInps.lT1 = circInps.rT*1;
-    circInps.lT2 = circInps.rT*4;
+    circInps.lT2 = circInps.rT*5;
     
     %flux compression generator inputs
-    circInps.Nfcc = 10;
-    circInps.Rfcc = 3.4;
+    circInps.Nfcc = 1;
+    circInps.Rfcc = 10;
     
     %-----------initial conditions
     circInps.I10 = 1e6; %Amps, initial current in primary
