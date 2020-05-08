@@ -6,8 +6,8 @@
 clear all
 close all
 
-NT1_vec=1:1e2;
-NT2_vec=1:1e2;
+NT1_vec=1:1e3;
+NT2_vec=1:1e3;
 
 plasmaInps.m_propellant = .125;
 %primary circuit (1) inputs
@@ -65,7 +65,7 @@ for i=1:length(NT1_vec)
 end
 %% Visualization
 figure(11)
-surf(NT2_vec,NT1_vec,Vcapf_mat*1e-3)
+surf(NT2_vec(1:100),NT1_vec(1:100),Vcapf_mat(1:100,1:100)*1e-3)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
 set(gca,'zscale','log')
@@ -73,7 +73,7 @@ xlabel('$N_{T2}$ (\#)','interpreter','latex','fontsize',24)
 ylabel('$N_{T1}$ (\#)','interpreter','latex','fontsize',24)
 zlabel('\boldmath$V_{cap_{f}}$ (kV)','interpreter','latex','fontsize',24)
 figure(10)
-surf(NT2_vec,NT1_vec,Vpf_mat*1e-3)
+surf(NT2_vec(1:100),NT1_vec(1:100),Vpf_mat(1:100,1:100)*1e-3)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
 xlabel('$N_{T2}$ (\#)','interpreter','latex','fontsize',24)
