@@ -64,7 +64,7 @@ V20 = circInps.V20;
 %calculation of secondary initial conditions
 taufcc = Rfcc/(2*sqrt(2*gamma*Rgas*2*T0));
 B0 = mu0 * Nfcc * I10 /Rfcc;  %initial magnetic field, this is an approximation using the radius of the coils as a length scale
-Phi0 = B0 * pi * Rfcc.^2;  %assuming this is conserved
+Phi0 = B0 * pi * (Rfcc.^2 - plasmaInps.Rp0^2);  %assuming this is conserved
 A0 = pi*Rfcc.^2; %cross sectional area of nozzle
 
 
@@ -78,7 +78,7 @@ Vfccfun = @(I,v) mu0 .* I * Nfcc^2/2 .* v;
 dfun = @(r) Rfcc/2 - r;
 
 %% initial conditions
-Rp0 = 0;
+Rp0 = plasmaInps.Rp0;
 vexp0 = sqrt(gamma*Rgas*2*T0);
 
 %voltage on coil from expanding plasma
