@@ -13,9 +13,13 @@ function Pbrexact = calcRad(circInps,plasmaInps,modelOutputs)
     Z=plasmaInps.Z;
     gamma=plasmaInps.g;
     Vp0=modelOutputs.V_plasma(1);
+    R_plasma=modelOutputs.R_plasma;
+    %% Fix plasma radius
+    [val,ind]=max(R_plasma);
+    R_plasma(ind:end)=val;
     %% Perform Calculations
     Rgas=Ru/MW; %this requires temeprature in KELVIN
-    vol=pi*modelOutputs.R_plasma.^2.*modelOutputs.R_plasma; %calculating volume assuming plasma is cylinder with length scale equal to it's radius
+    vol=pi*R_plasma.^2.*R_plasma; %calculating volume assuming plasma is cylinder with length scale equal to it's radius
     rho=plasmaInps.m_propellant./vol;
     T_0=plasmaInps.T0*1e3*eV+0.5*(gamma-1)*(Vp0.^2/(gamma*Rgas));
     Tf=T_0-0.5*(gamma-1)*(modelOutputs.V_plasma.^2/(gamma*Rgas));
