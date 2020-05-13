@@ -96,7 +96,13 @@ IV = [I10 I20 V10 V20 Rp0                    vexp0];
 options = odeset('Events',@propellant_escapes_EventsFcn,'MaxStep',10e-9);
 
 %solution to ode
-[t,y,te,ye,ie]=ode45(@odefuns,[0:dt:tf],IV,options);
+try
+    [t,y,te,ye,ie]=ode45(@odefuns,[0:dt:tf],IV,options);
+catch ME
+   disp('Error occured')
+   keyboard
+end
+    
 
 %call ode again if needed
 if ie(end)==2 %event triggered by plasma hitting wall or being redirected by other nozzle field, not flux coil field, need to redirect flow

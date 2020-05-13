@@ -45,7 +45,7 @@ circInps.V20 = 0;  %voltage on reactor caps
 plasmaInps.Rp0 = 1e-2; 
 
 %------Energy the capacitors must be charged to in order for the Z-machine to work
-targetEnergy=10*1e6;
+targetEnergy=50*1e6;
 
 graphDisplay=false;
 
