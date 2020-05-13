@@ -96,12 +96,12 @@ IV = [I10 I20 V10 V20 Rp0                    vexp0];
 options = odeset('Events',@propellant_escapes_EventsFcn,'MaxStep',10e-9);
 
 %solution to ode
-try
+% try
     [t,y,te,ye,ie]=ode45(@odefuns,[0:dt:tf],IV,options);
-catch ME
-   disp('Error occured')
-   keyboard
-end
+% catch ME
+%    disp('Error occured')
+%    keyboard
+% end
     
 
 %call ode again if needed
@@ -258,23 +258,23 @@ end
     end
 
     function [position,isterminal,direction] = propellant_escapes_EventsFcn(t,y)
-        position(1) = y(5); % plasma radius, The value that we want to be zero
-        isterminal(1) = 1;  % Halt integration if plasma leaves nozzle
-        direction(1) = -1;   % The zero can be approached from negative direction (after flow has been redirected)
+        position(1,1) = y(5); % plasma radius, The value that we want to be zero
+        isterminal(1,1) = 1;  % Halt integration if plasma leaves nozzle
+        direction(1,1) = -1;   % The zero can be approached from negative direction (after flow has been redirected)
 
-        position(2) =  dfun(y(5)) - .05*dfun(0); % The value that we want to be zero, when gap is less than 5% of original value
-        isterminal(2) = 1;  % Halt integration if plasma hits the wall protecting the coils and is abruptly redirected
-        direction(2) = 0;   % The zero can be approached from either direction
+        position(2,1) =  dfun(y(5)) - .05*dfun(0); % The value that we want to be zero, when gap is less than 5% of original value
+        isterminal(2,1) = 1;  % Halt integration if plasma hits the wall protecting the coils and is abruptly redirected
+        direction(2,1) = 0;   % The zero can be approached from either direction
         
         %capacitor charged up as much as it will get
-        position(3) =  y(2); % The value that we want to be zero, when gap is less than 5% of original value
-        isterminal(3) = 2;  % Halt integration if plasma hits the wall protecting the coils and is abruptly redirected
-        direction(3) = 0;   % The zero can be approached from either direction
+        position(3,1) =  y(2); % The value that we want to be zero, when gap is less than 5% of original value
+        isterminal(3,1) = 2;  % Halt integration if plasma hits the wall protecting the coils and is abruptly redirected
+        direction(3,1) = 0;   % The zero can be approached from either direction
 
         %flux coil current falls below seed current value
-        position(4) =  y(1)-I10; % The value that we want to be zero, when gap is less than 5% of original value
-        isterminal(4) = 1;  % Halt integration if plasma hits the wall protecting the coils and is abruptly redirected
-        direction(4) = -1;   % The zero can be approached only when the coil current is decreasing from its peak value
+        position(4,1) =  y(1)-I10; % The value that we want to be zero, when gap is less than 5% of original value
+        isterminal(4,1) = 1;  % Halt integration if plasma hits the wall protecting the coils and is abruptly redirected
+        direction(4,1) = -1;   % The zero can be approached only when the coil current is decreasing from its peak value
         
     end
 
