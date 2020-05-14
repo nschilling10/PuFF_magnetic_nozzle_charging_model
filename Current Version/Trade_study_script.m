@@ -70,7 +70,7 @@ for i=1:length(Nfcc_vec)
     end
 end
 %% Find max
-[max_mat,page_mat]=max(Vcapf_tensor,[],3);
+[max_mat,page_mat]=max(Vpf_tensor,[],3);
 [cols,rowInd_vec]=max(max_mat,[],1);
 [val,colInd]=max(cols);
 rowInd=rowInd_vec(colInd);
@@ -81,7 +81,7 @@ disp('Rfcc best =')
 Rfcc_vec(colInd)
 disp('I10 best =')
 I10_vec(pageInd)
-if val ~= Vcapf_tensor(rowInd,colInd,pageInd)
+if val ~= Vpf_tensor(rowInd,colInd,pageInd)
     disp('Indicies do not match max value')
     keyboard
 end
@@ -97,7 +97,7 @@ surf(Rfcc_vec,Nfcc_vec,Vcapf_tensor(:,:,pageInd)*1e-3)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
 set(gca,'zscale','log')
-xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+xlabel('$R_{fcc}$ (m)','interpreter','latex','fontsize',24)
 ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
 zlabel('\boldmath$V_{cap_{f}}$ (kV)','interpreter','latex','fontsize',24)
 title('$V_{cap_{f}}$ for $I_{1_{0_{max}}}$','interpreter','latex','fontsize',28)
@@ -105,17 +105,18 @@ figure(10)
 surf(Rfcc_vec,Nfcc_vec,Vpf_tensor(:,:,pageInd)*1e-3)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
-xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+xlabel('$R_{fcc}$ (m)','interpreter','latex','fontsize',24)
 ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
 zlabel('\boldmath$V_{plasma_{f}}$ (km/s)','interpreter','latex','fontsize',24)
 title('$V_{plasma_{f}}$ for $I_{1_{0_{max}}}$','interpreter','latex','fontsize',28)
 %% Changing page index visualization
 pageInd=1;
+figure(11)
 surf(Rfcc_vec,Nfcc_vec,Vcapf_tensor(:,:,pageInd)*1e-3)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
 set(gca,'zscale','log')
-xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+xlabel('$R_{fcc}$ (m)','interpreter','latex','fontsize',24)
 ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
 zlabel('\boldmath$V_{cap_{f}}$ (kV)','interpreter','latex','fontsize',24)
 title(strcat('$V_{cap_{f}}$ for $I_{1_{0}}=$',num2str(I10_vec(pageInd))),'interpreter','latex','fontsize',28)
@@ -123,7 +124,35 @@ figure(10)
 surf(Rfcc_vec,Nfcc_vec,Vpf_tensor(:,:,pageInd)*1e-3)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
-xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+xlabel('$R_{fcc}$ (m)','interpreter','latex','fontsize',24)
 ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
 zlabel('\boldmath$V_{plasma_{f}}$ (km/s)','interpreter','latex','fontsize',24)
 title(strcat('$V_{plasma_{f}}$ for $I_{1_{0}}=$',num2str(I10_vec(pageInd))),'interpreter','latex','fontsize',28)
+%% Visualization Nfcc vs. Current vs. Vplasma
+colInd=50;
+Vpf_vec=Vpf_tensor(:,colInd,:);
+Vpf_vec=Vpf_vec(:);
+Vpf_mat=reshape(Vpf_vec,[length(Nfcc_vec) length(I10_vec)]);
+figure(12)
+surf(I10_vec*1e-6,Nfcc_vec,Vpf_mat*1e-3)
+set(gca,'xscale','log')
+set(gca,'yscale','log')
+xlabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+ylabel('$I_{1_{0}}$ (MA)','interpreter','latex','fontsize',24)
+zlabel('\boldmath$V_{plasma_{f}}$ (km/s)','interpreter','latex','fontsize',24)
+title(strcat('$V_{plasma_{f}}$ for $R_{fcc}=$',num2str(Rfcc_vec(colInd)),'m'),'interpreter','latex','fontsize',28)
+%zlim([15 40])
+%% Visualization Nfcc vs. Current vs. Vplasma
+rowInd=15;
+Vpf_vec=Vpf_tensor(rowInd,:,:);
+Vpf_vec=Vpf_vec(:);
+Vpf_mat=reshape(Vpf_vec,[length(Rfcc_vec) length(I10_vec)]);
+figure(13)
+surf(I10_vec*1e-6,Rfcc_vec,Vpf_mat*1e-3)
+set(gca,'xscale','log')
+set(gca,'yscale','log')
+xlabel('$R_{fcc}$ (m)','interpreter','latex','fontsize',24)
+ylabel('$I_{1_{0}}$ (MA)','interpreter','latex','fontsize',24)
+zlabel('\boldmath$V_{plasma_{f}}$ (km/s)','interpreter','latex','fontsize',24)
+title(strcat('$V_{plasma_{f}}$ for $N_{fcc}=$',num2str(Nfcc_vec(rowInd))),'interpreter','latex','fontsize',28)
+%zlim([15 40])
