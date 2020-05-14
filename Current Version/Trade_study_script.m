@@ -6,8 +6,8 @@
 clear all
 close all
 
-Nfcc_vec=logspace(1,3,50);
-Rfcc_vec=logspace(-1,2,50);
+Nfcc_vec=round(logspace(1,3,50),0);
+Rfcc_vec=round(logspace(-1,2,50),2);
 I10_vec=logspace(-1,1,50)*1e6;
 
 plasmaInps.m_propellant = 150e-3;
@@ -70,10 +70,10 @@ for i=1:length(Nfcc_vec)
     end
 end
 %% Find max
-[max_mat,page_mat]=max(Vpf_tensor,[],3);
-[cols,rowInd_mat]=max(max_mat,[],1);
+[max_mat,page_mat]=max(Vcapf_tensor,[],3);
+[cols,rowInd_vec]=max(max_mat,[],1);
 [val,colInd]=max(cols);
-rowInd=rowInd_mat(colInd);
+rowInd=rowInd_vec(colInd);
 pageInd=page_mat(rowInd,colInd);
 disp('Nfcc best =')
 Nfcc_vec(rowInd)
@@ -93,19 +93,37 @@ graphDisplay=true;
 modelOutput=charging_nozzle_model(circInps,plasmaInps,graphDisplay); %run the model
 %% Visualization
 figure(11)
-surf(Rfcc_vec,Nfcc_vec,Vcapf_tensor(:,:,page_ind)*1e-3)
+surf(Rfcc_vec,Nfcc_vec,Vcapf_tensor(:,:,pageInd)*1e-3)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
 set(gca,'zscale','log')
-xlabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
-ylabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
 zlabel('\boldmath$V_{cap_{f}}$ (kV)','interpreter','latex','fontsize',24)
-title('$V_{cap_{f}} for I_{1_{0_{max}}}$','interpreter','latex','fontsize',28)
+title('$V_{cap_{f}}$ for $I_{1_{0_{max}}}$','interpreter','latex','fontsize',28)
 figure(10)
-surf(Rfcc_vec,Nfcc_vec,Vpf_tensor(:,:,page_ind)*1e-3)
+surf(Rfcc_vec,Nfcc_vec,Vpf_tensor(:,:,pageInd)*1e-3)
 set(gca,'xscale','log')
 set(gca,'yscale','log')
-xlabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
-ylabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
 zlabel('\boldmath$V_{plasma_{f}}$ (km/s)','interpreter','latex','fontsize',24)
-title('$V_{plasma_{f}} for I_{1_{0_{max}}}$','interpreter','latex','fontsize',28)
+title('$V_{plasma_{f}}$ for $I_{1_{0_{max}}}$','interpreter','latex','fontsize',28)
+%% Changing page index visualization
+pageInd=1;
+surf(Rfcc_vec,Nfcc_vec,Vcapf_tensor(:,:,pageInd)*1e-3)
+set(gca,'xscale','log')
+set(gca,'yscale','log')
+set(gca,'zscale','log')
+xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+zlabel('\boldmath$V_{cap_{f}}$ (kV)','interpreter','latex','fontsize',24)
+title(strcat('$V_{cap_{f}}$ for $I_{1_{0}}=$',num2str(I10_vec(pageInd))),'interpreter','latex','fontsize',28)
+figure(10)
+surf(Rfcc_vec,Nfcc_vec,Vpf_tensor(:,:,pageInd)*1e-3)
+set(gca,'xscale','log')
+set(gca,'yscale','log')
+xlabel('$R_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+ylabel('$N_{fcc}$ (\#)','interpreter','latex','fontsize',24)
+zlabel('\boldmath$V_{plasma_{f}}$ (km/s)','interpreter','latex','fontsize',24)
+title(strcat('$V_{plasma_{f}}$ for $I_{1_{0}}=$',num2str(I10_vec(pageInd))),'interpreter','latex','fontsize',28)
